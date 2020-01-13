@@ -13,11 +13,11 @@ This web application allows users to upload files from computer and view the upl
 ### **Registration Screen**
 ![Registration Screen](images/pic3.png)
 
-### **Interface to upload Files**
+### **Interface to upload files**
 ![Interface to upload Files](images/pic4.png)
 
-### **Uploading a File by drag and drop**
+### **Uploading a file by drag and drop**
 ![Uploading a File by drag and drop](images/pic5.png)
 
-### **QR code generates when you clik on a file**
-![QR code generates when you clik on a file](images/pic6.png)
+### **QR code generates when you click on a file**
+![QR code generates when you click on a file](images/pic6.png)
