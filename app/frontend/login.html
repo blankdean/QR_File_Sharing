@@ -1,0 +1,85 @@
+<html>
+
+<head>
+<title>Login</title>
+  <link rel="stylesheet" type="text/css" href="./css/login.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+
+
+<body>
+
+<!-- Header -->
+<center>
+  <h1>Mobile File Viewer by QR code</h1>
+</center>
+
+
+<!-- Login Form-->
+<div id="first">
+  <center>
+    <div id="header">
+      <h2 >Login</h2>
+    </div>
+  </center>
+  <form>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" class="form-control" id="username" placeholder="Username">
+        <center>
+          <small id="invalid"></small>
+        </center>
+    </div>
+    <div class="form-group">
+      <label for="inputPassword">Password</label>
+      <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+    </div>
+    <center>
+      <div>
+        <button type="button" onclick="login()" class="btn btn-primary">Login</button>
+      </div>
+      <div>
+        <label><small>Don't have an account?</small></label>
+        <small><a href="/register">Register Here</a></small>
+      </div>
+    </center>
+  </form>
+</div>
+
+
+<!-- Making Request to Server Checking Credentials -->
+<script>
+
+  function login() {
+
+    let username = $("#username").val();
+    let pass = $("#inputPassword").val();
+
+    let url = '/login';
+
+  	$.ajax({
+      url: url,
+      type: "POST",
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({username: username, password: pass}),
+      statusCode: {
+        200: function(user) {
+          window.location = "/";
+        },
+        401: function(req, status, err) {
+          alert("Credentials don't match anything in our database.");
+        },
+        500: function(request, status, error) {
+          alert("Internal server error.");
+        }
+      }
+    });
+  };
+
+</script>
+
+</body>
+
+</html>

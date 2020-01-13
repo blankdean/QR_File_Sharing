@@ -1,0 +1,116 @@
+ button {
+  font-size: .8em !important;
+  width: 80px !important;
+  float: right;
+}
+
+.row {
+  padding: 0 2vw 0 2vw;
+}
+
+.file{
+  border: 1px solid black;
+}
+
+.btn.btn-primary.btn-sm{
+  margin-top: 10px;
+  width:  100px !important;
+  height: 30px !important;
+}
+
+.btn.btn-secondary.btn-sm{
+  margin-top: 5px;
+  margin-bottom: 10px;
+  width:  100px !important;
+  height: 30px !important;
+}
+
+.filepond--drop-label {
+  color: #4c4e53;
+  font-size: medium;
+}
+
+.filepond--label-action {
+  text-decoration-color: #babdc0;
+}
+
+.filepond--panel-root {
+  border-radius: 2em;
+  background-color: #edf0f4;
+  height: 1em;
+}
+
+.filepond--item-panel {
+  background-color: #595e68;
+  padding-bottom: 8px;
+}
+
+.filepond--drip-blob {
+  background-color: #7f8a9a;
+}
+
+/* Style the Image Used to Trigger the Modal */
+#myImg {
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#myImg:hover {opacity: 0.7;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+}
+
+/* Modal Content (Image) */
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 300px;
+    max-width: 700px;
+    /* background-color: rgb(100,0,0); /* Fallback color */ */
+}
+
+/* Add Animation - Zoom in the Modal */
+.modal-content, #caption {
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+
+@keyframes zoom {
+    from {transform:scale(0)}
+    to {transform:scale(1)}
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+    .modal-content {
+        width: 100%;
+    }
+}
+
+#header {
+  background-image: url("../images/bg-02.jpg");
+  color: white;
+  font-size: 30px;
+  margin: 0;
+}
+
+.filepond--file-action-button {
+  background-color: rgb(0,0,0,0);
+}
+
+img{
+   padding: 10px;
+}

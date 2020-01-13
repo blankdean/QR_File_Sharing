@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <title>Request file</title>
+  </head>
+  <body>
+    <h1 id="description">Get file with ID </h1>
+    <div class="webflow-style-input">
+	    <input id="pin" type="text" pattern="[0-9]*" placeholder="PIN code"></input>
+      <button onclick="getFile()"><i class="icon ion-android-arrow-forward"></i></button>
+    </div>
+  </body>
+</html>
+
+<style>
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  background-image: radial-gradient(circle at 0% 0%, #373b52, #252736 51%, #1d1e26);
+  width: 100vw;
+  height: 100vh;
+  color: #ffffff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+html {
+  box-sizing: border-box;
+  font-size: 10px;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body, ul, li {
+  margin: 0;
+  padding: 0;
+}
+li {
+  list-style: none;
+}
+p, h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+}
+a {
+  text-decoration: none;
+}
+input {
+  border-style: none;
+  background: transparent;
+  outline: none;
+}
+button {
+  padding: 0;
+  background: none;
+  border: none;
+  outline: none;
+}
+@keyframes gradient {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+.webflow-style-input {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  border-radius: 2px;
+  padding: 1.4rem 2rem 1.6rem;
+  background: rgba(57, 63, 84, 0.8);
+}
+.webflow-style-input:after {
+  content: "";
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: 999;
+  height: 2px;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  background-position: 0% 0%;
+  background: linear-gradient(to right, #b294ff, #57e6e6, #feffb8, #57e6e6, #b294ff, #57e6e6);
+  background-size: 500% auto;
+  animation: gradient 3s linear infinite;
+}
+.webflow-style-input input {
+  flex-grow: 1;
+  color: #bfd2ff;
+  font-size: 1.8rem;
+  line-height: 2.4rem;
+  vertical-align: middle;
+}
+.webflow-style-input input::-webkit-input-placeholder {
+  color: #7881a1;
+}
+.webflow-style-input button {
+  color: #7881a1;
+  font-size: 2.4rem;
+  line-height: 2.4rem;
+  vertical-align: middle;
+  transition: color 0.25s;
+}
+.webflow-style-input button:hover {
+  color: #bfd2ff;
+}
+
+
+</style>
+
+<script>
+
+var fileName = "";
+
+$(document).ready(function() {
+  fileName = location.pathname.substring(1).split("/")[1];
+  $("#description").append(fileName);
+});
+
+function getFile() {
+  let pin = $("#pin").val();
+
+  if(!pin.length || !/^\d{4}$/.test(pin)) {
+    alert("PIN must be a combination of four digits.");
+    return;
+  }
+
+  window.location = `/file/${fileName}?pin=${pin}`;
+}
+
+</script>

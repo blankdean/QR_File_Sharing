@@ -1,0 +1,230 @@
+<html>
+
+<head>
+<title>File</title>
+
+  <!-- JQuery -->
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+  <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <!-- FilePond Style Sheet -->
+  <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+  <!-- Load FilePond library -->
+  <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+
+  <!-- qrCode Generator -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="./css/dashboard.css">
+
+</head>
+
+<body>
+  <!-- Header -->
+  <center>
+    <div data-role="header" data-position="fixed">
+      <button id="logout" onclick="logout()">Logout</button>
+      <p id="header">Hello</p>
+    </div>
+  </center>
+
+  <div id='fileList'></div>
+
+  <!-- We'll transform this input into a pond -->
+  <!-- change the endpoint/paramter to username from cookie -->
+  <input name="file" type="file" class="filepond" data-max-files="1" data-role="none">
+
+  <!-- The Modal -->
+  <div data-role="none" id="myModal" class="modal">
+    <!-- Modal Content (The Image) -->
+    <div id="popup" class="modal-content"></div>
+    <br>
+    <center>
+      <div color="white" id="pin" class="modal-content"></div>
+    </center>
+  </div>
+
+  <!-- placeholder for QR image -->
+  <div id="ex1"></div>
+
+</body>
+
+<script>
+
+  // making qr code object
+  const qrcode = new QRCode("ex1",'test');
+  $("#ex1").hide();
+
+  function logout() {
+    $.ajax({
+      url: '/logout',
+      type: "GET",
+      success: function(msg) {
+        window.location = '/login';
+      },
+      error: function () {
+        alert('Error logging out');
+      }
+    });
+  }
+
+  // QR Code Generator
+  function popup(url, pin){
+
+    qrcode.makeCode(url); // changing qr code to url
+
+    let qrImg = qrcode._el.childNodes[1];
+    // var qrImg = qrcode;
+
+    $("img").addClass("modal-content");
+    $("#popup").html(qrImg);
+    $("#pin").html("Pin Code: " + pin);
+
+    //display modal
+    modal.style.display = "block";
+    $(".filepond").hide();
+    $("#form").hide();
+    $("#logout").hide();
+  }
+
+
+  let modal = document.getElementById('myModal');
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+      $(".filepond").show();
+      $("#form").show();
+      $("#logout").show();
+    }
+  };
+
+
+  // DELETE Button 
+  function deletefile(fileId){
+
+    let username = document.cookie.split("=")[1];
+    let url = `/${username}/${fileId}`;
+
+    if (!confirm('Are you sure you want to delete file?')) {
+      return  // exit function with return if user does not want to delete file after prompt
+    } 
+
+  	$.ajax({
+      url: url,
+      type: "DELETE",
+      success: function(msg) {
+        loadfiles(username);       
+      },
+      error: function () {
+        alert('Error deleting file');
+      }
+    });
+  };
+
+
+  // RENAME Button
+  function rename(fileId){
+
+    var username = document.cookie.split("=")[1];
+    var newname = prompt('Rename File:');
+    if(newname == null) {
+      return;
+    }
+    var url = `/${username}/${fileId}?newName=${newname}`;
+    
+    $.ajax({
+      url: url,
+      type: "PATCH",
+      success: function(msg) {
+        $(`#${fileId}`).html(`<h5 class="mb-1">${newname}</h5>`)
+      },
+      error: function() {
+        alert('Error renaming file');
+      }
+    });
+  };
+
+  // Loads files from USER Account
+  function loadfiles(username){
+    
+    let url = `/${username}/files`; //load files
+    $.ajax({
+      url: url,
+      type: "GET",
+      success: function(msg) {
+      let content = ''
+      let files = msg;
+      for (let i = 0; i < files.length; i++) {
+        let name = files[i]["name"];
+        let fileID = files[i]["fileID"];
+        let path = files[i]["path"];
+        let upload_date = files[i]["upload_date"].split('T')[0];
+        let upload_time = files[i]["upload_date"].split('T')[1].split('Z')[0].split(".")[0];
+        let size = Math.round((files[i]["size"] / 1024));
+        let pin = files[i]["pin"];
+
+        content+=`
+          <div class="file" id="${name}">
+            <div class="row"> 
+              <a href="javascript:popup('${path}','${pin}')" rel="modal:open" class="col-sm-11" id="${fileID}">      
+                <h5 class="mb-1">${name}</h5>
+              </a>
+              <div class="col-sm-1">
+                <small class="text-muted">
+                  <button class="btn btn-primary btn-sm" id="${name}" onclick="rename('${fileID}')">Rename</button>
+                </small>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-11" id="uploadDate">
+                <small>Uploaded: ${upload_date},${upload_time}</small> <br>
+                <small>Size: ${size} KB</small>
+              </div>  
+              <div class="col-sm-1">
+              <small class="text-muted"><button class="btn btn-secondary btn-sm" id="${name}" onclick="deletefile('${fileID}')">Delete</button></small>
+              </div>
+            </div>
+          </div>`
+      }
+
+      $('#fileList').html(content);
+      // Load header DATA
+      $('#header').html(`Hello ${username}`)
+
+      },
+      error: function () {
+        alert('Error fetching files.');
+      }
+    });
+  }
+
+  // populate page with user's files from page load
+  $(document).ready(function(){
+    FilePond.parse(document.body);
+    let username = document.cookie.split("=")[1];
+    FilePond.setOptions({
+      server: {
+        process: `/${username}`
+      }
+    });
+
+    const pond = document.querySelector('.filepond--root'); 
+    pond.addEventListener('FilePond:processfile', (e, file) => {
+      loadfiles(username);
+    });
+
+    loadfiles(username);
+  });
+
+</script>
+
+</html>

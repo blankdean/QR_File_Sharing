@@ -1,0 +1,35 @@
+div {
+  margin: 0 auto;
+  width:60%; /* value of your choice which suits your alignment */
+
+}
+#header {
+  margin-top: 40;
+}
+
+button {
+  width: 60%;
+}
+
+#first {
+  border: 3px solid black;
+  border-radius: 25px;
+  margin-top: 50;
+  width: 400px;
+  color: white;
+}
+
+a {
+  color: white !important;
+  text-decoration: underline !important;
+}
+
+body {
+  background-image: url("../images/bg-01.jpg");
+  background-size: cover;
+}
+
+h1{
+  color: white !important;
+  margin-top: 10 !important;
+}
